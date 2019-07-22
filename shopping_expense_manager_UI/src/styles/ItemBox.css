@@ -1,0 +1,8 @@
+.ItemBox{
+    padding: 10px;
+}
+
+.align {
+    display: flex !important;
+    justify-content: space-between !important;
+}
