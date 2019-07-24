@@ -6,3 +6,13 @@
     display: flex !important;
     justify-content: space-between !important;
 }
+
+.item-content{
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.item-content:disabled{
+    color: black !important;
+    opacity: 0.7 !important;
+}
