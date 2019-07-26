@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 var allNoteSchema = new mongoose.Schema({
     id:{
-        type:String
+        type:String, unique:true
     },
     title:{
         type:String
@@ -15,4 +15,4 @@ var allNoteSchema = new mongoose.Schema({
     }
 });
 
-mongoose.model('allNotes',allNoteSchema);
+module.exports=mongoose.model('allNotes',allNoteSchema);

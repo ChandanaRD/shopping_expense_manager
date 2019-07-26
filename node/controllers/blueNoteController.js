@@ -1,51 +1,74 @@
-const express = require('express');
-var router = express.Router();
+const Express = require('express');
 const BodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var note = require('../models/blueNote.model.js');
+var router = Express.Router({mergeParams:true});
 
-var app = express();
+router.get('/', (req, res)=>{
+    res.send("Hey! welcome!")
+});
 
-app.use(BodyParser.json());
-app.use(BodyParser.urlencoded({ extended:true }));
-
-mongoose.connect('mongodb://localhost:27017/blueNoteDB', {useNewUrlParser:true},(err)=>{
-    if(err){
-        console.log(err);
-    }else{
-        console.log("connection successfully established!");
-    }
-
-})
-
-
-// const mongoose = require('mongoose');
-
-app.post("/create", async (request, response) => {
-    try {
-        var note = new user(request.body);
-        var result = await note.save();
-        response.send(result);
-        console.log("note added")
-    } catch (error) {
-        console.log("error creating user!!");
-        response.status(500).send(error);
+router.get('/getAll',async (req, res)=>{
+    try{
+        var result = await note.find().exec();
+        res.send(result);
+    }catch(err){
+        res.status(500).send(err);
+        console.log('error fetching data');
     }
 });
 
-router.get('/',(req, res)=>{
-    // note.find(function (err, products) {
-    //     if (err) return console.log(err);
-    //     res.json(products);
-    // })
-    res.json('check')
+router.post('/addOne',async (req,res)=>{
+    try{
+        var newNote= new note(req.body);
+        var result = newNote.save(function (err) {
+            if (err) return handleError(err);
+        });
+        var list = await note.find().exec();
+        res.send(list);
+        console.log("One document inserted!");
+    }catch(err){
+        res.status(500).send(err);
+        console.log('could not create');
+    }
+});
+
+router.post('/addMultiple',async (req,res)=>{
+    try{
+        var newNote= new note(req.body);
+        var result = newNote.collection.insertMany(req.body,function (err) {
+            if (err) return console.log(err);
+        });
+        var list = await note.find().exec();
+        res.send(list);
+        console.log(req.body.length+" documents inserted!");
+    }catch(err){
+        res.status(500).send(err);
+        console.log('could not create');
+    }
+});
+
+router.put('/editNote:id', async(req, res)=>{
+    try{
+        var editNote = await note.find({'id':req.params.id}).exec();
+        console.log(req.params.id)
+        editNote.set(req.body);
+        var result = await note.save();
+        result = await note.find().exec();
+        console.log(result);
+        res.send(result);
+    }catch(err){
+        res.status(500).send(err);
+    }
 })
 
-router.get('/all', (req, res )=> {
-    note.find(function (err, products) {
-      if (err) return next(err);
-      res.json(products);
-    });
-  });
+router.delete("/deleteNote:id", async (req, res)=>{
+    try{
+        var result = await note.deleteOne({id:req.params.id}).exec();
+        res.send(result);
+    }catch(error){
+        res.status(500).send(error);
+    }
+})
 
 module.exports = router;
