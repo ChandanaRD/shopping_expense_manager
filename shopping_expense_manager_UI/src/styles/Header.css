@@ -1,0 +1,21 @@
+.Header{
+    display: flex;
+    height: auto;
+    padding: 5px;
+    background-color: #2185d0;
+    color: white;
+    font-size: x-large;
+    justify-content: space-between;
+    font-weight: 900;
+    box-shadow: coral;
+    border-radius: 3px;
+    /* line-height: 1.6; */
+    box-shadow: 0 0 0 0 rgba(34,36,38,.15) inset;
+    text-align: center;
+}
+.header-text{
+    /* vertical-align: middle !important;
+    display: flex;
+    justify-content: stretch; */
+    padding: 15px;
+}
