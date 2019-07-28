@@ -10,46 +10,38 @@ router.get('/', (req, res)=>{
     res.send("Hey! welcome!")
 });
 
-router.get('/getAll',async (req, res)=>{
+router.get('/getAllNotes',async (req, res)=>{
     try{
         var result = await note.find().exec();
-        res.send(result);
+        console.log("All notes fetched");
+        res.status(200).send(result);
     }catch(err){
         res.status(500).send(err);
         console.log('error fetching data');
+        console.log(err);
     }
 });
 
-router.post('/addOne',async (req,res)=>{
-    //format => inside req.body should contain : {"id":"n1","title":"item1","done":false,"disabled":true}
-    console.log("addone");
-    try{
-        console.log(req.body);
-        var newNote= new note(req.body);
-        var result = newNote.save(function (err) {
-            if (err) return handleError(err);
-        });
-        var list = await note.find().exec();
-        res.send(list);
-        console.log("One document inserted!");
-    }catch(err){
-        res.status(500).send(err);
-        console.log('could not create');
-    }
-});
-
-router.post('/addMultiple',async (req,res)=>{
+router.post('/addNote',async (req,res)=>{
     //format => inside req.body should contain : [{"id":"n1","title":"item1","done":false,"disabled":true}]
+    // can add one or more notes together
     try{
+        var i=0;
         var newNote= new note(req.body);
-        var result = await newNote.collection.insertMany(req.body,function (err) {
+        var error = null;
+        var result = await newNote.collection.insertMany(req.body,function (err, result) {
             if (err) {
-                console.log("could not insert document");
-                res.send(err);
+                console.log(err);
+                error=err;
+                console.log(err);
+                res.status(210).send(err);
+            } else if(result){
+                console.log('no. of documents inserted: ' +req.body.length);
+                res.status(200).send(result);
+                console.log(result);
             }
         });
-        res.send('inserted');
-        console.log('inserted');
+        // console.log('inserted');
     }catch(err){
         res.status(500).send(err);
         console.log('could not create');
@@ -58,30 +50,38 @@ router.post('/addMultiple',async (req,res)=>{
 
 router.put('/editNote:id', async(req, res)=>{
     //reqURL : http://localhost:3001/allNotes/editNoten2
+    // req.body: {"id":"idVal"} or {"reqVield":"requiredVal"} one or more or all fields
+    var filter = {id:req.params.id};
+    var update = req.body;
+    var error = null;
+    var docToBeUpdated=null;
     try{
-        note.findOneAndUpdate({id:req.params.id},{$set: req.body},function(err,doc){
+        await note.findOneAndUpdate(filter,update,function(err,result){
             if (err) {
-                console.log("update document error");
-            } else {
-                console.log("update document success");
-                res.send('the following document: '+JSON.stringify(doc)+' \n is updated to: '+JSON.stringify(req.body));
+                console.log("update document error:\n"+err);
+                res.status(205).send(err);
+            } else if(result) {
+                console.log('the following document: '+JSON.stringify(result)+' \n is updated to: '+JSON.stringify(req.body))
+            res.status(200).send(result);
             }
         })
-        result = await note.find().exec();
-        // console.log(result);
-        // res.send(result);
     }catch(err){
         res.status(500).send(err);
         console.log(err);
     }
 })
 
-router.delete("/deleteNote:id", async (req, res)=>{
-    //reqURL : http://localhost:3001/allNotes/deleteNoten2
+router.delete("/deleteNote", async (req, res)=>{
+    //reqURL : http://localhost:3001/allNotes/deleteNote
+    // req.body : ["n1","n2","n3"] or ["n1"]
+    console.log(req.body);
+    var filter={'id':{$in:req.body}}
     try{
-        var result = await note.deleteOne({id:req.params.id}).exec();
-        res.send(result);
+        var result = await note.deleteMany(filter).exec();
+        console.log(result);
+        res.status(200).send(result);
     }catch(error){
+        console.log(error);
         res.status(500).send(error);
     }
 })
