@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-var allNoteSchema = new mongoose.Schema({
+var itemSchema = new mongoose.Schema({
     id:{
         type:String, unique:true
     },
@@ -15,4 +15,4 @@ var allNoteSchema = new mongoose.Schema({
     }
 });
 
-module.exports=mongoose.model('allNotes',allNoteSchema);
+module.exports=mongoose.model('allitems',itemSchema);

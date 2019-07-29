@@ -1,14 +1,14 @@
 import React from 'react';
-import ItemBox from './ItemBox';
-import '../styles/ShoppingList.css';
+import Item from './Item';
+import '../styles/List.css';
 import '../styles/common.css';
 
-class ShoppingList extends React.Component {
+class Item extends React.Component {
     constructor(props) {
-        console.log('constructer called')
+        console.log('List constructer called')
         super(props);
         this.state = {
-            'shoppingItemList': [],
+            'ListArray': [],
             'isError': false,
             'isLoading': false,
         };
@@ -20,9 +20,9 @@ class ShoppingList extends React.Component {
 
     generateItemId = () => {
         var newID = 0;
-        if (this.state.shoppingItemList.length > 0) {
-            this.state.shoppingItemList.forEach(({ id }) => {
-                if (id === "it" + newID && newID <= this.state.shoppingItemList.length) {
+        if (this.state.ListArray.length > 0) {
+            this.state.ListArray.forEach(({ id }) => {
+                if (id === "it" + newID && newID <= this.state.ListArray.length) {
                     newID++;
                 } else {
                     return "it" + newID;
@@ -33,10 +33,10 @@ class ShoppingList extends React.Component {
         }
     }
 
-    addItemToList = () => {
-        console.log('inside addItemList');
-        var id = 'it' + this.state.shoppingItemList.length;
-        var addNote = new Request('http://localhost:3001/allNotes/addNote', {
+    addList = () => {
+        console.log('inside addList');
+        var id = 'it' + this.state.ListArray.length;
+        var addNote = new Request('http://localhost:3001/blueNotes/addNote', {
             method: 'post',
             body: JSON.stringify([{ 'id': id, 'title': '', 'done': false, 'disabled': true }]),
             headers: {
@@ -51,7 +51,7 @@ class ShoppingList extends React.Component {
                 console.log(response)
                 response.json().then(data => {
                     if (data)
-                        this.setState({ shoppingItemList: data, isLoading: false })
+                        this.setState({ itemList: data, isLoading: false })
                     else
                         this.setState({ isLoading: false, isError: true })
                 })
@@ -64,13 +64,13 @@ class ShoppingList extends React.Component {
 
     editItem = (itemid, newval) => {
         console.log('inside editItem');
-        var itemIndex = this.state.shoppingItemList.findIndex(({ id }) => {
+        var itemIndex = this.state.itemList.findIndex(({ id }) => {
             return id === itemid;
         });
-        var newShoppingItemList = this.state.shoppingItemList.slice();
-        if(!newShoppingItemList[itemIndex].disabled){
+        var newitemList = this.state.itemList.slice();
+        if(!newitemList[itemIndex].disabled){
             this.setState({ isLoading: true });
-            var editNote = new Request('http://localhost:3001/allNotes/editNote' + itemid, {
+            var editNote = new Request('http://localhost:3001/blueNotes/editNote' + itemid, {
                 method: 'put',
                 body: JSON.stringify({ title: newval, disabled: true }),
                 headers: {
@@ -84,7 +84,7 @@ class ShoppingList extends React.Component {
                     console.log(response)
                     response.json().then(data => {
                         if (data)
-                            this.setState({ shoppingItemList: data, isLoading: false })
+                            this.setState({ itemList: data, isLoading: false })
                         else
                             this.setState({ isLoading: false, isError: true })
                     })
@@ -94,19 +94,19 @@ class ShoppingList extends React.Component {
                     this.setState({ isLoading: false, isError: true })
                 })
         } else {
-            newShoppingItemList[itemIndex].disabled = false;
+            newitemList[itemIndex].disabled = false;
         }
-        this.setState({ 'shoppingItemList': newShoppingItemList })
+        this.setState({ 'itemList': newitemList })
     }
 
     onDoneToggle = (itemid) => {
         console.log('inside done');
-        var itemIndex = this.state.shoppingItemList.findIndex(({ id }) => {
+        var itemIndex = this.state.itemList.findIndex(({ id }) => {
             return id === itemid;
         });
-        var noteDone = new Request('http://localhost:3001/allNotes/editNote' + itemid, {
+        var noteDone = new Request('http://localhost:3001/blueNotes/editNote' + itemid, {
                 method: 'put',
-                body: JSON.stringify({ disabled: true, done: !this.state.shoppingItemList[itemIndex].done }),
+                body: JSON.stringify({ disabled: true, done: !this.state.itemList[itemIndex].done }),
                 headers: {
                     'Access-Control-Allow-Origin': '*',
                     'Content-Type': 'application/json'
@@ -120,7 +120,7 @@ class ShoppingList extends React.Component {
                         console.log('data');
                         console.log(data);
                         if (data)
-                            this.setState({ shoppingItemList: data, isLoading: false })
+                            this.setState({ itemList: data, isLoading: false })
                         else
                             this.setState({ isLoading: false, isError: true })
                     })
@@ -129,22 +129,22 @@ class ShoppingList extends React.Component {
                     console.log(err);
                     this.setState({ isLoading: false, isError: true })
                 })
-        // var newShoppingItemList = this.state.shoppingItemList.slice();
-        // newShoppingItemList[itemIndex].done = newShoppingItemList[itemIndex].done ? false : true;
-        // newShoppingItemList[itemIndex].disabled = true;
-        // this.setState({ 'shoppingItemList': newShoppingItemList })
+        // var newitemList = this.state.itemList.slice();
+        // newitemList[itemIndex].done = newitemList[itemIndex].done ? false : true;
+        // newitemList[itemIndex].disabled = true;
+        // this.setState({ 'itemList': newitemList })
     }
 
     deleteItem = (itemid) => {
         console.log('delete item');
         var ids = [];
         ids.push(itemid);
-        // var newShoppingItemList = this.state.shoppingItemList.filter(({ id }) => {
+        // var newitemList = this.state.itemList.filter(({ id }) => {
         //     return id !== itemid;
         // });
-        // this.setState({ 'shoppingItemList': newShoppingItemList })
+        // this.setState({ 'itemList': newitemList })
 
-        var deleteNote = new Request('http://localhost:3001/allNotes/deleteNote', {
+        var deleteNote = new Request('http://localhost:3001/blueNotes/deleteNote', {
             method: 'delete',
             redirect: 'follow',
             body:JSON.stringify({'ids':[itemid]}),
@@ -158,7 +158,7 @@ class ShoppingList extends React.Component {
             .then(response => response.json())
             .then(data => {
                 if (data)
-                    this.setState({ shoppingItemList: data, isLoading: false })
+                    this.setState({ itemList: data, isLoading: false })
                 else
                     this.setState({ isLoading: false, isError: true })
             })
@@ -168,11 +168,11 @@ class ShoppingList extends React.Component {
             })
     }
 
-    displayShoppingList = () => {
-        if (this.state.shoppingItemList.length !== 0) {
+    displayItem = () => {
+        if (this.state.itemList.length !== 0) {
             console.log('items=>');
             return (
-                this.state.shoppingItemList.map((item) => {
+                this.state.itemList.map((item) => {
                     console.log(item);
                     return (<ItemBox content={item} onEdit={this.editItem} onDelete={this.deleteItem} onDoneToggle={this.onDoneToggle} ></ItemBox>)
                 }))
@@ -190,7 +190,7 @@ class ShoppingList extends React.Component {
     }
 
     componentDidMount() {
-        var getAllNotes = new Request('http://localhost:3001/allNotes/getAllNotes', {
+        var getblueNotes = new Request('http://localhost:3001/blueNotes/getblueNotes', {
             method: 'GET',
             redirect: 'follow',
             headers: {
@@ -199,11 +199,11 @@ class ShoppingList extends React.Component {
             }
         });
         this.setState({ isLoading: true });
-        fetch(getAllNotes)
+        fetch(getblueNotes)
             .then(response => response.json())
             .then(data => {
                 if (data)
-                    this.setState({ shoppingItemList: data, isLoading: false })
+                    this.setState({ itemList: data, isLoading: false })
                 else
                     this.setState({ isLoading: false, isError: true })
             })
@@ -214,9 +214,9 @@ class ShoppingList extends React.Component {
     }
 
     render() {
-        return (<div className='ShoppingList'>
+        return (<div className='Item'>
             <div className='header'>
-                <div className="ui vertical animated button primary" onClick={() => { this.addItemToList() }} >
+                <div className="ui vertical animated button primary" onClick={() => { this.addItem() }} >
                     <div className="hidden content">Add</div>
                     <div className="visible content">
                         <i className="plus icon"></i>
@@ -224,10 +224,10 @@ class ShoppingList extends React.Component {
                 </div>
             </div>
             {
-                this.displayShoppingList()
+                this.displayItem()
             }
         </div>);
     }
 }
 
-export default ShoppingList;
+export default Item;

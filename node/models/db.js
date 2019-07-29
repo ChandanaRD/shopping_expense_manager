@@ -9,4 +9,4 @@ mongoose.connect('mongodb://localhost:27017/blueNoteDB', {useNewUrlParser:true},
 
 })
 
-require('./blueNote.model.js');
+require('./itemModel.js');
