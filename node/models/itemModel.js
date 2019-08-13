@@ -12,6 +12,9 @@ var itemSchema = new mongoose.Schema({
     },
     disabled:{
         type:Boolean
+    },
+    listID:{
+        type:String
     }
 });
 

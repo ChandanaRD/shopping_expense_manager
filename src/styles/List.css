@@ -1,0 +1,17 @@
+.List-wrapper{
+    padding: 15px;
+}
+.container{
+    padding: 3px !important;
+    margin: 10px;
+    border-radius: 4px;
+    background-color: #2185d0 !important;
+    color: white !important;
+}
+.blue{
+    background-color: #2185d0 !important;
+    color: white !important;
+}
+.content{
+    cursor: pointer;
+}

@@ -100,9 +100,11 @@ router.delete("/deleteList", async (req, res)=>{
     }
 })
 
-router.get('/getItems',async (req, res)=>{
+router.get('/getItems:Lid',async (req, res)=>{
     try{
-        var result = await item.find().exec();
+        
+        var filter = {listID:req.params.Lid}
+        var result = await item.find({ qty: { $gt: 4 } } ).exec();
         console.log("All notes fetched");
         res.status(200).send(result);
     }catch(err){
