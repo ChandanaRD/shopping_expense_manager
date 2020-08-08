@@ -5,7 +5,7 @@ import '../styles/common.css';
 const Header = ()=>{
     return(<div className='Header'>
         <button className='icon-button'><i className='bars icon'></i></button>
-        <div className='header-text'>Blue Note</div>
+        <div className='header-text'>Grocery List</div>
         <button className='icon-button'>
         <i className='icon sun outline'></i>
         </button>
