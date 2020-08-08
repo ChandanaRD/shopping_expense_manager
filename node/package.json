@@ -6,7 +6,8 @@
   "scripts": {
     "run-mongo-local": "cd C:/Program Files/MongoDB/Server/4.0/bin && mongod.exe --dbpath D:/CRD_workSpace/projects/expense_manager/shopping_expense_manager/node/dbData",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start-dev": "nodemon server.js",
+    "start-prod": "node server.js"
   },
   "keywords": [],
   "author": "",

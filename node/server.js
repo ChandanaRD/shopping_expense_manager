@@ -13,3 +13,7 @@ app.listen(3001,()=>{
 });
 
 app.use('/allNotes', allNoteController);
+
+app.get('/', (req, res)=>{
+    res.send("Server is up!")
+});
