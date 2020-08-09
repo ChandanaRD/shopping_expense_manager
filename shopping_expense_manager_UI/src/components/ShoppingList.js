@@ -17,6 +17,7 @@ class ShoppingList extends React.Component {
             'Content-Type': 'application/json'
         });
     }
+    baseUrl = 'http://18.191.172.75:3001';
 
     generateItemId = () => {
         var newID = 0;
@@ -36,7 +37,7 @@ class ShoppingList extends React.Component {
     addItemToList = () => {
         console.log('inside addItemList');
         var id = 'it' + this.state.shoppingItemList.length;
-        var addNote = new Request('http://localhost:3001/allNotes/addNote', {
+        var addNote = new Request(this.baseUrl + '/allNotes/addNote', {
             method: 'post',
             body: JSON.stringify([{ 'id': id, 'title': '', 'done': false, 'disabled': true }]),
             headers: {
@@ -70,7 +71,7 @@ class ShoppingList extends React.Component {
         var newShoppingItemList = this.state.shoppingItemList.slice();
         if(!newShoppingItemList[itemIndex].disabled){
             this.setState({ isLoading: true });
-            var editNote = new Request('http://localhost:3001/allNotes/editNote' + itemid, {
+            var editNote = new Request(this.baseUrl + '/allNotes/editNote' + itemid, {
                 method: 'put',
                 body: JSON.stringify({ title: newval, disabled: true }),
                 headers: {
@@ -104,7 +105,7 @@ class ShoppingList extends React.Component {
         var itemIndex = this.state.shoppingItemList.findIndex(({ id }) => {
             return id === itemid;
         });
-        var noteDone = new Request('http://localhost:3001/allNotes/editNote' + itemid, {
+        var noteDone = new Request(this.baseUrl + '/allNotes/editNote' + itemid, {
                 method: 'put',
                 body: JSON.stringify({ disabled: true, done: !this.state.shoppingItemList[itemIndex].done }),
                 headers: {
@@ -144,7 +145,7 @@ class ShoppingList extends React.Component {
         // });
         // this.setState({ 'shoppingItemList': newShoppingItemList })
 
-        var deleteNote = new Request('http://localhost:3001/allNotes/deleteNote', {
+        var deleteNote = new Request(this.baseUrl + '/allNotes/deleteNote', {
             method: 'delete',
             redirect: 'follow',
             body:JSON.stringify({'ids':[itemid]}),
@@ -190,7 +191,7 @@ class ShoppingList extends React.Component {
     }
 
     componentDidMount() {
-        var getAllNotes = new Request('http://localhost:3001/allNotes/getAllNotes', {
+        var getAllNotes = new Request(this.baseUrl + '/allNotes/getAllNotes', {
             method: 'GET',
             redirect: 'follow',
             headers: {
@@ -211,6 +212,11 @@ class ShoppingList extends React.Component {
                 console.log(err);
                 this.setState({ isLoading: false, isError: true })
             })
+    }
+
+    getReqUrl = (enpoint) => {
+        this.baseUrl = this.baseUrl;
+        return this.baseUrl+enpoint; 
     }
 
     render() {
