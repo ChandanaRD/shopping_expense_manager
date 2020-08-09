@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.19.2",
     "gh-pages": "^2.0.1",
     "node-sass": "^4.12.0",
     "react": "^16.8.6",
@@ -12,7 +13,9 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "start-all-dev": "npm run build && (cd ../node && npm run start-dev)",
     "build": "react-scripts build",
+    "postbuild": "mv build ../node/public/shopping_expense_manager/",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",

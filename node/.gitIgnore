@@ -1,2 +1,9 @@
+# Packages
 node_modules
+
+# Database info
 ../node/dbData
+
+# build folders from frontend
+/public/build/
+/public/shopping_expense_manager

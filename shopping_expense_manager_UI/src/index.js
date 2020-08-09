@@ -5,9 +5,10 @@ import ShoppingList from './components/ShoppingList';
 import Header from './components/Header';
 
 const Index = () => {
-    return (<div>
-        <Header></Header>
-        <ShoppingList></ShoppingList>
-            </div>);
+  return (
+    <div>
+      <Header> </Header> <ShoppingList> </ShoppingList>{' '}
+    </div>
+  );
 };
 ReactDOM.render(<Index />, document.querySelector('#root'));
