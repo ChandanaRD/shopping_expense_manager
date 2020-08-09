@@ -33,5 +33,9 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://chandanard.github.io/shopping_expense_manager/"
+  "homepage": "https://chandanard.github.io/shopping_expense_manager/",
+  "devDependencies": {
+    "husky": "^4.2.5",
+    "pretty-quick": "^2.0.1"
+  }
 }
