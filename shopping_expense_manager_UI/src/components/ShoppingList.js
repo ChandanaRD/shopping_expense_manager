@@ -17,7 +17,7 @@ class ShoppingList extends React.Component {
       'Content-Type': 'application/json',
     });
   }
-  baseUrl = 'http://ec2-18-191-172-75.us-east-2.compute.amazonaws.com:3001/';
+  baseUrl = 'http://ec2-18-191-172-75.us-east-2.compute.amazonaws.com:3001';
 
   generateItemId = () => {
     var newID = 0;
